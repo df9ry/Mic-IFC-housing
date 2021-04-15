@@ -6,13 +6,10 @@ include <Maße.scad>
 $fa = 1;
 $fs = 0.4;
 
-// Steg zur Halterung der Platine
-steg_breite =  1.0;
-
 // Loch für die Eingangsbuchse
 loch_durchm =  7.0;
-loch_z      =  7.0; // Über der Platine
-loch_x      = 30.0; // X-Achse relativ zur Platine
+loch_z      =  7.5; // Über der Platine
+loch_x      = 31.0; // X-Achse relativ zur Platine
 
 module part1_loch() {
     translate([0, gehaeuse_dicke / 2, 0]) {
@@ -39,19 +36,6 @@ module part1_boden() {
                          + platine_bodenfreiheit
                          + platine_dicke + loch_z])
                     part1_loch();
-                // Untere Aussparung:
-                translate([gehaeuse_dicke, -delta, -delta])
-                    cube([platine_breite, 
-                          gehaeuse_dicke + 2*delta, 
-                          gehaeuse_dicke + raste_z +delta]);
-                // Obere Aussparung:
-                translate([gehaeuse_dicke, -delta,
-                           gehaeuse_dicke + platine_bodenfreiheit
-                         + platine_dicke + platine_lichtefreiheit
-                         - raste_z])
-                    cube([platine_breite, 
-                          gehaeuse_dicke + 2*delta, 
-                          gehaeuse_dicke + raste_z +delta]);
         }
     }
 }
@@ -64,7 +48,8 @@ module part1_left() {
     // Steg unten:
     translate([gehaeuse_dicke, 0, gehaeuse_dicke])
         cube([steg_breite, platine_tiefe,
-              platine_bodenfreiheit]);
+              platine_dicke + platine_bodenfreiheit
+            - gehaeuse_dicke]);
     // Steg oben:
     translate([gehaeuse_dicke, 0, 
                gehaeuse_dicke + platine_bodenfreiheit

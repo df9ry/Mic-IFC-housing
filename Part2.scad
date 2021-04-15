@@ -2,8 +2,8 @@ include <Maße.scad>
 
 module part2_aussparung() {
     translate([-delta, -delta,
-               gehaeuse_dicke + platine_bodenfreiheit
-             + platine_dicke])
+               2 * gehaeuse_dicke + platine_bodenfreiheit
+               + platine_dicke + luft])
     cube([aussparung_breite + delta, gehaeuse_dicke + 2*delta,
           aussparung_hoehe]);
 }
@@ -11,8 +11,8 @@ module part2_aussparung() {
 module part2_front_platte() {
     cube([2 * gehaeuse_dicke + platine_breite,
           gehaeuse_dicke,
-          2 * gehaeuse_dicke + platine_bodenfreiheit
-        + platine_dicke + platine_lichtefreiheit]);
+          4 * gehaeuse_dicke + platine_bodenfreiheit
+        + platine_dicke + platine_lichtefreiheit + 2 * luft]);
 }
 
 module part2_front() {
@@ -22,22 +22,36 @@ module part2_front() {
     }
 }
 
+module schiene() {
+    cube([steg_breite, platine_tiefe / 2, gehaeuse_dicke - luft]);
+}
+
 module part2_boden() {
-    translate([gehaeuse_dicke, gehaeuse_dicke - delta, 0])
-        cube([platine_breite, platine_tiefe + delta + gehaeuse_dicke,
+    translate([0, gehaeuse_dicke - delta, 0])
+        cube([2 * gehaeuse_dicke + platine_breite,
+              platine_tiefe + delta +  2 * gehaeuse_dicke + luft,
               gehaeuse_dicke]);
     // Raste:
-    translate([gehaeuse_dicke, platine_tiefe + gehaeuse_dicke,
+    translate([0, platine_tiefe + 2 * gehaeuse_dicke + luft,
                gehaeuse_dicke - delta])
-        cube([platine_breite, 
+        cube([2 * gehaeuse_dicke + platine_breite, 
               gehaeuse_dicke, raste_z + delta]);
+    // Schiene links:
+    translate([gehaeuse_dicke, gehaeuse_dicke - delta,
+               gehaeuse_dicke - delta])
+        schiene();
+    // Schiene rechts:
+    translate([gehaeuse_dicke + platine_breite - steg_breite,
+               gehaeuse_dicke - delta, gehaeuse_dicke - delta])
+        schiene();
 }
 
 module part2_deckel() {
     mirror([0, 0, 1])
         translate([0, 0, 
-                - 2 * gehaeuse_dicke - platine_bodenfreiheit
-                - platine_dicke - platine_lichtefreiheit])
+                - 4 * gehaeuse_dicke - platine_bodenfreiheit
+                - platine_dicke - platine_lichtefreiheit
+                - 2 * luft])
             part2_boden();
 }
 
